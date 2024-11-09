@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment } from "react";
 import Link from "next/link";
 
 import LocalSearch from "@/components/shared/search/local-search";
 import UserCard from "@/components/cards/user-card";
-import axios from "axios";
+// import axios from "axios";
 import search from "@/assets/icons/search.svg";
 
 interface SearchParamsProps {

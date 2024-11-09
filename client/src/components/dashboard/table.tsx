@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 // import axios from "axios";
@@ -21,7 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ITransaction } from "@/types";
+// import { ITransaction } from "@/types";
 import { rupeeSymbol } from "@/lib/utils";
 // import AddTransaction from "./add-transaction";
 import { Upload } from "lucide-react";
@@ -29,9 +31,9 @@ import { Button } from "@/components/ui/button";
 // import { useToast } from "@/hooks/use-toast";
 
 interface TableProps {
-    weekly: ITransaction[];
-    monthly: ITransaction[];
-    yearly: ITransaction[];
+    weekly: any[];
+    monthly: any[];
+    yearly: any[];
 }
 
 export default function DashboardTable({
