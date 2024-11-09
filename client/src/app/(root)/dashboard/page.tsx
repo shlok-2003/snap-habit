@@ -13,7 +13,9 @@ import { Flame } from "lucide-react";
 
 import Loading from "@/components/ui/loading";
 import Report from "@/components/dashboard/report";
+import LinearChart from "@/components/ui/linear-chart";
 import DashboardTable from "@/components/dashboard/table";
+import CircularProgress from "@/components/ui/circular-progress";
 
 export default function Dashboard() {
     const { user, isLoaded } = useUser();
@@ -34,8 +36,8 @@ export default function Dashboard() {
                                 !
                             </CardTitle>
                             <CardDescription className="text-balance max-w-lg leading-relaxed">
-                                Remember, consistency is key. Keep pushing towards
-                                your goals every day!
+                                Remember, consistency is key. Keep pushing
+                                towards your goals every day!
                             </CardDescription>
                         </CardHeader>
                     </Card>
@@ -61,19 +63,34 @@ export default function Dashboard() {
 
                 <div className="flex md:flex-row gap-4 flex-col">
                     <Card className="flex-1">
-                        <CardHeader>
-                            <CardTitle>Tip of the Day</CardTitle>
-                            <CardDescription>Tips</CardDescription>
-                        </CardHeader>
-                        <CardContent className="font-medium"></CardContent>
+                        <CardContent className="font-medium h-full relative">
+                            <CardHeader>
+                                <CardTitle>Daily Score</CardTitle>
+                            </CardHeader>
+                            <CircularProgress
+                                progress={61}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                            />
+                        </CardContent>
                     </Card>
 
                     <Card className="flex-1">
                         <CardHeader>
-                            <CardTitle>Tip of the Day</CardTitle>
-                            <CardDescription>Tips</CardDescription>
+                            <CardTitle>Weekly Score</CardTitle>
                         </CardHeader>
-                        <CardContent className="font-medium"></CardContent>
+                        <CardContent className="font-medium">
+                            <LinearChart
+                                data={[
+                                    { name: "Mon", value: 10 },
+                                    { name: "Tue", value: 50 },
+                                    { name: "Wed", value: 20 },
+                                    { name: "Thu", value: 60 },
+                                    { name: "Fri", value: 10 },
+                                    { name: "Sat", value: 60 },
+                                    { name: "Sun", value: 70 },
+                                ]}
+                            />
+                        </CardContent>
                     </Card>
                 </div>
 

@@ -69,11 +69,11 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter className="">
+            <SidebarFooter>
                 <SignOutButton>
-                    <span className="bg-custom-orange w-full px-2 py-1 rounded-lg overflow-hidden">
+                    <button className="w-full bg-custom-orange text-white px-4 py-2 rounded-lg font-semibold hover:bg-custom-dark-orange transition-colors">
                         Sign Out
-                    </span>
+                    </button>
                 </SignOutButton>
             </SidebarFooter>
         </Sidebar>
