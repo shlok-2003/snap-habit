@@ -17,6 +17,7 @@ const Community = ({ searchParams }: SearchParamsProps) => {
     // const result = await getAllUsers({
     //     searchQuery: searchParams.q,
     // });
+    
 
     const result = {
         users: [
