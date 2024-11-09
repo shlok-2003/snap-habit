@@ -5,8 +5,38 @@
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Vite + React + TS</title>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement(
+                    {
+                        pageLanguage: "en",
+                        layout: google.translate.TranslateElement.InlineLayout
+                            .SIMPLE,
+                    },
+                    "google_translate_element",
+                );
+            }
+        </script>
+        <script
+            type="text/javascript"
+            src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        ></script>
+
+        <style>
+            .goog-te-gadget-simple {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 10px !important;
+            }
+
+            .goog-te-gadget-simple > span > a {
+                display: flex !important;
+                flex-direction: row !important;
+            }
+        </style>
     </head>
     <body>
+        <div id="google_translate_element" class="flex bg-custom-fade-orange py-2 px-2 justify-end"></div>
         <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
     </body>
