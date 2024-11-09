@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { ArrowRight, BarChart2, Globe2, Heart, Shield } from "lucide-react";
+import { BarChart2, Globe2, Heart, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function About() {
