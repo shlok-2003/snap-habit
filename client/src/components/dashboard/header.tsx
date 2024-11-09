@@ -14,7 +14,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import Translation from "../ui/translation";
+// import Translation from "../ui/translation";
 
 export default function Header() {
     const { user } = useUser();
@@ -46,7 +46,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-2 h-full">
-                <Translation />
+                {/* <Translation /> */}
                 <ToggleMode className="size-7 rounded-xl" />
                 {user ? (
                     <UserButton />
