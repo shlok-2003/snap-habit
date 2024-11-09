@@ -22,23 +22,38 @@ type FeatureCardProps = {
 
 const cards: FeatureCardProps[] = [
     {
-        title: "Feature Title",
-        description: "Feature Description",
-        features: ["Feature 1", "Feature 2", "Feature 3"],
+        title: "Dashboard",
+        description:
+            "Dive into a detailed overview of your coding activity. Track your daily and weekly commits to monitor consistency, keep up streaks, and visualize progress over time. Stay motivated by viewing trends that help you set and reach your development goals.",
+        features: [
+            "Daily Commit Tracker",
+            "Weekly Progress Overview",
+            "Streak Maintenance",
+        ],
         image: "/dashboard.png",
         flexDirection: "flex-row",
     },
     {
-        title: "Feature Title",
-        description: "Feature Description",
-        features: ["Feature 1", "Feature 2", "Feature 3"],
+        title: "Profile",
+        description:
+            "Your personal space for live updates, sharing achievements, and collecting badges. Track your growth with live commits, make your journey shareable with friends, and earn badges to celebrate coding milestones, reflecting your ongoing accomplishments.",
+        features: [
+            "Live Commit Updates",
+            "Shareable Profile",
+            "Achievement Badges",
+        ],
         image: "/dashboard.png",
         flexDirection: "flex-row-reverse",
     },
     {
-        title: "Feature Title",
-        description: "Feature Description",
-        features: ["Feature 1", "Feature 2", "Feature 3"],
+        title: "Explore",
+        description:
+            "Discover new commit ideas and expand your coding repertoire. Explore recommended commits tailored to your skills, add personal goals, and create custom commits. This feature empowers you to build a coding journey that’s unique to you.",
+        features: [
+            "Recommended Commits",
+            "Add New Commit",
+            "Create Custom Commit",
+        ],
         image: "/dashboard.png",
         flexDirection: "flex-row",
     },
@@ -58,13 +73,14 @@ export default function Features() {
             <div className="container self-center text-center max-w-2xl flex flex-col gap-4">
                 <div className="text-4xl font-semibold max-lg:text-3xl max-md:text-xl max-md:px-2">
                     <span className="text-custom-orange">
-                        Save 7+ hours/week
+                        Save time and energy
                     </span>{" "}
-                    with Convert CRM
+                    with Snap Habit
                 </div>
                 <div className="max-w-lg mx-auto text-lg max-md:text-sm m">
-                    Save countless hours on manual data entry and aggregates all
-                    the data you need to focus on closing deals easily
+                    Reduce energy consumption, streamline sustainability
+                    initiatives, and access all the data you need to drive
+                    meaningful environmental impact effortlessly.
                 </div>
             </div>
 
@@ -111,9 +127,7 @@ function FeatureCard({
                             {title}
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            {description} Lorem ipsum, dolor sit amet
-                            consectetur adipisicing elit. At incidunt rem et
-                            dolorem fugiat in reiciendis est veniam nam quis?
+                            {description}
                         </p>
                         <ul className="space-y-3">
                             {features.map((feature, index) => (
