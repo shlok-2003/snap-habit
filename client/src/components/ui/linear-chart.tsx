@@ -2,13 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     ChartConfig,
     ChartContainer,
@@ -21,29 +15,18 @@ export const description = "A linear area chart";
 const chartConfig = {
     desktop: {
         label: "Desktop",
-        color: "hsl(var(--chart-1))",
+        color: "var(--custom-orange)",
     },
 } satisfies ChartConfig;
 
 interface LinearChartProps {
     data: { name: string; value: number }[];
-    title: string;
-    description: string;
     tickSize?: number;
 }
 
-export default function LinearChart({
-    data,
-    title,
-    description,
-    tickSize = 3,
-}: LinearChartProps) {
+export default function LinearChart({ data, tickSize = 3 }: LinearChartProps) {
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
-            </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
                     <AreaChart
@@ -70,9 +53,9 @@ export default function LinearChart({
                         <Area
                             dataKey="value"
                             type="linear"
-                            fill="var(--color-desktop)"
+                            fill="var(--custom-dark-orange)"
                             fillOpacity={0.4}
-                            stroke="var(--color-desktop)"
+                            stroke="var(--custom-dark-orange)"
                         />
                     </AreaChart>
                 </ChartContainer>
