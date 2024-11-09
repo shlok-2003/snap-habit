@@ -14,7 +14,7 @@ import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
     return (
-        <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="flex items-center justify-center min-h-screen bg-background bg-[url('/client-bg.jpg')] bg-cover bg-no-repeat">
             <Card className="w-[350px]">
                 <CardHeader>
                     <CardTitle>Welcome back</CardTitle>

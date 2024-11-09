@@ -39,5 +39,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
             return false;
         },
+        authorized: async ({ auth }) => {
+            return auth !== null;
+        },
     },
 } satisfies NextAuthConfig);
