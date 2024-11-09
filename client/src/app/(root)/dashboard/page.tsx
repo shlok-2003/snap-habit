@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import {
     Card,
     CardDescription,
@@ -17,7 +19,14 @@ import { useAuthenticates } from "@/hooks/use-authenticate";
 export default function Dashboard() {
     const { session, status } = useAuthenticates();
 
+    const [commitsCompleted, setCommitsCompleted] = useState<number>(0);
+    const [dailyStreak, setDailyStreak] = useState<number>(0);
+
     if (status === "loading") return <Loading />;
+
+    useEffect(() => {
+        
+    })
 
     console.log(session);
 
