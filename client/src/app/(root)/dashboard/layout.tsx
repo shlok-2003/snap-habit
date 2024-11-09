@@ -6,6 +6,7 @@ import Header from "@/components/dashboard/header";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 
 const openSans = Open_Sans({
     subsets: ["latin"],
@@ -30,6 +31,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                     <Header />
                     {children}
                 </main>
+                <Toaster />
             </SidebarProvider>
         </ThemeProvider>
     );
