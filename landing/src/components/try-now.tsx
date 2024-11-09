@@ -19,7 +19,11 @@ export default function TryNow() {
                             Log in
                         </Button>
                     </a>
-                    <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL}>
+                    <a
+                        href={
+                            import.meta.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL
+                        }
+                    >
                         <Button
                             variant="outline"
                             size="lg"

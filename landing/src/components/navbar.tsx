@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Menu } from 'lucide-react';
+import { useState } from "react";
+import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -114,7 +114,7 @@ export default function Navbar() {
                 <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL}>
                     <Button className="bg-custom-orange text-white font-semibold hover:bg-custom-orange/90 max-md:text-sm flex max-md:px-3 max-md:py-0">
                         Sign up
-                </Button>
+                    </Button>
                 </a>
             </div>
         </header>

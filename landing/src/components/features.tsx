@@ -98,7 +98,7 @@ function FeatureCard({
     }, []);
 
     return (
-        <Card className="overflow-hidden max-w-5xl shadow-none border-none rounded-2xl max-md:divide-y-[0.5px] divide-black" >
+        <Card className="overflow-hidden max-w-5xl shadow-none border-none rounded-2xl max-md:divide-y-[0.5px] divide-black">
             <CardHeader className="sr-only">
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{description}</CardDescription>
