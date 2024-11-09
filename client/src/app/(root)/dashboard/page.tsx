@@ -12,9 +12,7 @@ import {
 import { Flame } from "lucide-react";
 
 import Loading from "@/components/ui/loading";
-import Report from "@/components/dashboard/report";
 import LinearChart from "@/components/ui/linear-chart";
-import DashboardTable from "@/components/dashboard/table";
 import CircularProgress from "@/components/ui/circular-progress";
 
 export default function Dashboard() {
@@ -95,9 +93,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid lg:grid-cols-3 gap-4">
-                    <DashboardTable weekly={[]} monthly={[]} yearly={[]} />
-
-                    <Report />
+                    
                 </div>
             </div>
         </main>
