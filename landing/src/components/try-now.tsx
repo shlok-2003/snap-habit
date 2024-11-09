@@ -11,7 +11,7 @@ export default function TryNow() {
                     - use our app and get started!
                 </h1>
                 <div className="flex items-center justify-center gap-4">
-                    <a href={process.env.VITE_PUBLIC_CLIENT_BASE_LOGIN_URL}>
+                    <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_LOGIN_URL}>
                         <Button
                             size="lg"
                             className="bg-custom-orange text-white font-semibold hover:bg-custom-orange/90 max-md:text-sm flex max-md:px-3 max-md:py-0"
@@ -19,7 +19,7 @@ export default function TryNow() {
                             Log in
                         </Button>
                     </a>
-                    <a href={process.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL}>
+                    <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL}>
                         <Button
                             variant="outline"
                             size="lg"
