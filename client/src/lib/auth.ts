@@ -27,17 +27,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 return false;
             }
 
-            const userExists = await axios.post(SIGN_UP_BACKEND_URL, {
+            const createUser = await axios.post(SIGN_UP_BACKEND_URL, {
                 email: profile.email,
                 name: profile.name,
                 image: user.image
             });
 
-            if (userExists.status === 200) {
+            if (createUser.status === 200) {
                 return true;
             }
 
-            return false;
+            return true;
         },
     },
 } satisfies NextAuthConfig);
