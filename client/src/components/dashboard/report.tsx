@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -29,16 +30,12 @@ export default function Report() {
             <TabsContent value="week">
                 <LinearChart
                     data={weekData}
-                    title="Transactions"
-                    description="Weekly transactions from your bank."
                 />
             </TabsContent>
 
             <TabsContent value="month">
                 <LinearChart
                     data={monthData}
-                    title="Transactions"
-                    description="Monthly transactions from your bank."
                     tickSize={6}
                 />
             </TabsContent>
