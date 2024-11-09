@@ -27,7 +27,11 @@ export default function Dashboard() {
                     <Card className="sm:col-span-2">
                         <CardHeader className="pb-3">
                             <CardTitle className="lg:text-3xl md:text-2xl">
-                                Good Morning {user?.firstName}!
+                                Good Morning{" "}
+                                <span className="text-custom-dark-orange">
+                                    {user?.firstName}
+                                </span>
+                                !
                             </CardTitle>
                             <CardDescription className="text-balance max-w-lg leading-relaxed">
                                 Remember, consistency is key. Keep pushing towards
