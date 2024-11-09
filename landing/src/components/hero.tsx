@@ -16,7 +16,7 @@ export default function Hero() {
                 }
             >
                 <img
-                    src={`/dashboard.avif`}
+                    src={`/dashboard.png`}
                     alt="hero"
                     className="mx-auto rounded-2xl object-cover h-full object-left-top"
                     draggable={false}

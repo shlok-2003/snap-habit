@@ -36,10 +36,10 @@ export default function About() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
                     viewport={{ once: true }}
-                    className="flex-1 flex justify-end items-center"
+                    className="flex-1 flex justify-end items-center overflow-hidden"
                 >
                     <img
-                        src="/temp-dashboard-portrait.png"
+                        src="/dashboard-mobile.png"
                         alt="dashboard"
                         className="aspect-[9/16] max-md:h-[450px] max-lg:h-[550px] h-[600px]"
                     />

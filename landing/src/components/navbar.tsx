@@ -64,7 +64,8 @@ export default function Navbar() {
                 </SheetContent>
             </Sheet>
 
-            <img src="/logo.png" alt="logo" />
+            {/* <img src="/logo.png" alt="logo" /> */}
+            <div className="text-2xl font-bold">Snap Habit</div>
             <nav className="hidden gap-2 lg:flex [&>*]:text-black [&>*]:font-medium [&>*]:rounded-xl [&>*]:px-3 [&>*]:py-1 [&>*]:transition-colors [&>*]:duration-300">
                 <Link
                     to="home"
