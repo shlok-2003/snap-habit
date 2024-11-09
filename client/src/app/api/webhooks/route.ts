@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 
         const data = mongoUser.data;
 
-        return NextResponse.json({ message: "OK", user: data });
+        return NextResponse.json({ message: "OK", data });
     }
 
     return new Response("", { status: 200 });
