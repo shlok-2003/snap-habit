@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Contact, Gift, Home, School, Search, User } from "lucide-react";
 
 import {
     Sidebar,
@@ -9,34 +9,41 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarFooter,
 } from "@/components/ui/sidebar";
+import { SignOutButton } from "@clerk/nextjs";
 
 // Menu items.
 const items = [
     {
         title: "Home",
-        url: "#",
+        url: "/dashboard",
         icon: Home,
     },
     {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
+        title: "Educational Content",
+        url: "/dashboard/educational-content",
+        icon: School,
     },
     {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
+        title: "Profile",
+        url: "/dashboard/profile",
+        icon: User,
     },
     {
-        title: "Search",
-        url: "#",
+        title: "Bounty",
+        url: "/dashboard/bounty",
+        icon: Gift,
+    },
+    {
+        title: "Explore",
+        url: "/dashboard/explore",
         icon: Search,
     },
     {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
+        title: "Friends",
+        url: "/dashboard/friends",
+        icon: Contact,
     },
 ];
 
@@ -45,7 +52,7 @@ export function AppSidebar() {
         <Sidebar className="font-open-sans">
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Project Name</SidebarGroupLabel>
+                    <SidebarGroupLabel>Snap Habit</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
@@ -62,6 +69,13 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter className="">
+                <SignOutButton>
+                    <span className="bg-custom-orange w-full px-2 py-1 rounded-lg overflow-hidden">
+                        Sign Out
+                    </span>
+                </SignOutButton>
+            </SidebarFooter>
         </Sidebar>
     );
 }

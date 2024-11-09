@@ -22,7 +22,12 @@ const config: Config = {
     				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
     				border: 'hsl(var(--sidebar-border))',
     				ring: 'hsl(var(--sidebar-ring))'
-    			}
+    			},
+				"custom": {
+					"orange": "var(--custom-orange)",
+					"fade-orange": "var(--custom-fade-orange)",
+					"dark-orange": "var(--custom-dark-orange)"
+				}
     		},
     		borderRadius: {
     			lg: 'var(--radius)',
