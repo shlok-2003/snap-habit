@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/input";
 
@@ -25,16 +25,16 @@ const LocalSearch: React.FC<LocalSearchProps> = ({
 }) => {
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
-    const query = searchParams.get("q") || "";
+    const query = "";
     const [searchQuery, setSearchQuery] = useState<string>(query);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchQuery) {
                 const newUrl = formUrlQuery({
-                    params: searchParams.toString(),
+                    params: "",
                     key: "q",
                     value: searchQuery,
                 });
@@ -43,7 +43,7 @@ const LocalSearch: React.FC<LocalSearchProps> = ({
             } else {
                 if (pathname === route) {
                     const newUrl = removeKeysFromQuery({
-                        params: searchParams.toString(),
+                        params: "",
                         keysToRemove: ["q"],
                     });
 
@@ -53,7 +53,7 @@ const LocalSearch: React.FC<LocalSearchProps> = ({
         }, 300);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [searchQuery, searchParams, route, pathname, router, query]);
+    }, [searchQuery, route, pathname, router, query]);
 
     return (
         <div

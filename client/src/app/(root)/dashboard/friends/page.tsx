@@ -1,5 +1,3 @@
-"use client";
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment } from "react";
 import Link from "next/link";
@@ -13,11 +11,10 @@ interface SearchParamsProps {
     searchParams: { [key: string]: string | undefined };
 }
 
-const Community = ({ searchParams }: SearchParamsProps) => {
+const Community = async ({ searchParams }: SearchParamsProps) => {
     // const result = await getAllUsers({
     //     searchQuery: searchParams.q,
     // });
-    
 
     const result = {
         users: [
