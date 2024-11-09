@@ -1,19 +1,32 @@
+import useWindowSize from "@/hooks/use-window-size";
 import { cn } from "@/lib/utils";
 
 interface CircularProgressProps extends React.HTMLAttributes<HTMLDivElement> {
     progress: number;
 }
 
-export default function CircularProgress({ progress, className, ...props }: CircularProgressProps) {
-    const radius = 120;
-    const strokeWidth = 20;
+export default function CircularProgress({
+    progress,
+    className,
+    ...props
+}: CircularProgressProps) {
+    const { width } = useWindowSize();
+
+    const radius = width > 1024 ? 120 : (width > 768 ? 60 : 80);
+    const strokeWidth = width > 1024 ? 20 : (width > 768 ? 10 : 15);
     const normalizedRadius = radius - strokeWidth / 2;
     const circumference = normalizedRadius * 2 * Math.PI;
 
     const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     return (
-        <div className={cn("flex items-center justify-center relative", className)} {...props}>
+        <div
+            className={cn(
+                "flex items-center justify-center relative",
+                className,
+            )}
+            {...props}
+        >
             <div className="relative">
                 <svg
                     height={radius * 2}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import SessionWrapper from "@/components/session-provider";
+
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,19 +17,10 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased">
-                <ClerkProvider
-                    signInFallbackRedirectUrl={
-                        process.env
-                            .NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL
-                    }
-                    signUpFallbackRedirectUrl={
-                        process.env
-                            .NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL
-                    }
-                    afterSignOutUrl="/"
-                >
+                <SessionWrapper>
                     {children}
-                </ClerkProvider>
+                    <Toaster />
+                </SessionWrapper>
             </body>
         </html>
     );

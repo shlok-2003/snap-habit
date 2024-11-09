@@ -50,3 +50,10 @@ body {
         --sidebar-ring: 217.2 91.2% 59.8%;
     }
 }
+
+.circular-progress {
+    --size: clamp(120px, 30vw, 240px);
+    --stroke-width: calc(var(--size) / 12);
+    width: var(--size);
+    height: var(--size);
+}

@@ -2,7 +2,6 @@
 
 import { Fragment } from "react";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import ToggleMode from "@/components/ui/toggle-mode";
@@ -15,12 +14,17 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 // import Translation from "../ui/translation";
+import { useAuthenticates } from "@/hooks/use-authenticate";
+import Loading from "../ui/loading";
+
 
 export default function Header() {
-    const { user } = useUser();
+    const { session, status } = useAuthenticates();
 
     const pathname = usePathname();
     const title = pathname.split("/").slice(1);
+
+    if (status === "loading") return <Loading />;
 
     return (
         <header className="flex h-20 items-center gap-4 border-b bg-background px-2 sm:border-0 py-2 sm:bg-transparent justify-between">
@@ -48,8 +52,12 @@ export default function Header() {
             <div className="flex items-center gap-2 h-full">
                 {/* <Translation /> */}
                 <ToggleMode className="size-7 rounded-xl" />
-                {user ? (
-                    <UserButton />
+                {session?.user?.image ? (
+                    <img
+                        src={session?.user?.image}
+                        alt="User profile"
+                        className="size-7 rounded-full"
+                    />
                 ) : (
                     <Skeleton className="size-7 rounded-full" />
                 )}

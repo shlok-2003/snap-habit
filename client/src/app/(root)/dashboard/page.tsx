@@ -1,7 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-
 import {
     Card,
     CardDescription,
@@ -14,22 +12,25 @@ import { Flame } from "lucide-react";
 import Loading from "@/components/ui/loading";
 import LinearChart from "@/components/ui/linear-chart";
 import CircularProgress from "@/components/ui/circular-progress";
+import { useAuthenticates } from "@/hooks/use-authenticate";
 
 export default function Dashboard() {
-    const { user, isLoaded } = useUser();
+    const { session, status } = useAuthenticates();
 
-    if (!isLoaded) return <Loading />;
+    if (status === "loading") return <Loading />;
+
+    console.log(session);
 
     return (
         <main className="grid items-start gap-4 p-0 sm:p-4 sm:px-6 sm:py-0 md:gap-8 w-full">
             <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
-                    <Card className="sm:col-span-2">
+                <div className="grid gap-4 grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+                    <Card className="col-span-2">
                         <CardHeader className="pb-3">
                             <CardTitle className="lg:text-3xl md:text-2xl">
                                 Good Morning{" "}
                                 <span className="text-custom-dark-orange">
-                                    {user?.firstName}
+                                    {session?.user?.name?.split(" ")[0]}
                                 </span>
                                 !
                             </CardTitle>
@@ -43,7 +44,7 @@ export default function Dashboard() {
                     <Card>
                         <CardHeader className="pb-2">
                             <CardDescription>Commits Completed</CardDescription>
-                            <CardTitle className="lg:text-3xl md:text-2xl">
+                            <CardTitle className="lg:text-3xl md:text-2xl text-xl">
                                 {2} / {10}
                             </CardTitle>
                         </CardHeader>
@@ -51,8 +52,8 @@ export default function Dashboard() {
                     <Card>
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
-                            <CardTitle className="lg:text-3xl md:text-2xl flex flex-row gap-2">
-                                <Flame height={"2.2rem"} width={"2.2rem"} />{" "}
+                            <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
+                                <Flame className="" />{" "}
                                 {20}
                             </CardTitle>
                         </CardHeader>
@@ -67,7 +68,7 @@ export default function Dashboard() {
                             </CardHeader>
                             <CircularProgress
                                 progress={61}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                                className="flex justify-center items-center"
                             />
                         </CardContent>
                     </Card>
