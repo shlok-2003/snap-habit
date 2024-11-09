@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 
 export default function About() {
     return (
-        <section className="flex flex-col gap-8">
+        <section className="flex flex-col gap-8" id="about">
             <Button
                 className="self-center w-fit rounded-xl"
                 style={{

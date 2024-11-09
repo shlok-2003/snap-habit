@@ -4,6 +4,8 @@ import { Menu } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
+import { Link } from "react-scroll";
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -18,88 +20,102 @@ export default function Navbar() {
                 </SheetTrigger>
                 <SheetContent side="top" className="w-full">
                     <nav className="grid gap-4 py-4">
-                        <a
-                            href="#home"
+                        <Link
+                            to="home"
                             className="text-base font-medium"
                             onClick={() => setIsOpen(false)}
+                            smooth={true}
                         >
                             Home
-                        </a>
-                        <a
-                            href="#features"
+                        </Link>
+                        <Link
+                            to="about"
                             className="text-base font-medium"
                             onClick={() => setIsOpen(false)}
-                        >
-                            Features
-                        </a>
-                        <a
-                            href="#about"
-                            className="text-base font-medium"
-                            onClick={() => setIsOpen(false)}
+                            smooth={true}
                         >
                             About
-                        </a>
-                        <a
-                            href="#testimonials"
+                        </Link>
+                        <Link
+                            to="features"
                             className="text-base font-medium"
                             onClick={() => setIsOpen(false)}
+                            smooth={true}
+                        >
+                            Features
+                        </Link>
+                        <Link
+                            to="testimonials"
+                            className="text-base font-medium"
+                            onClick={() => setIsOpen(false)}
+                            smooth={true}
                         >
                             Testimonials
-                        </a>
-                        <a
-                            href="#trynow"
+                        </Link>
+                        <Link
+                            to="trynow"
                             className="text-base font-medium"
                             onClick={() => setIsOpen(false)}
+                            smooth={true}
                         >
                             Try Now
-                        </a>
+                        </Link>
                     </nav>
                 </SheetContent>
             </Sheet>
 
             <img src="/logo.png" alt="logo" />
             <nav className="hidden gap-2 lg:flex [&>*]:text-black [&>*]:font-medium [&>*]:rounded-xl [&>*]:px-3 [&>*]:py-1 [&>*]:transition-colors [&>*]:duration-300">
-                <a
-                    href="#home"
+                <Link
+                    to="home"
+                    smooth={true}
                     className="text-base font-medium hover:bg-custom-fade-orange"
                 >
                     Home
-                </a>
-                <a
-                    href="#features"
-                    className="text-base font-medium hover:bg-custom-fade-orange"
-                >
-                    Features
-                </a>
-                <a
-                    href="#about"
+                </Link>
+                <Link
+                    to="about"
+                    smooth={true}
                     className="text-base font-medium hover:bg-custom-fade-orange"
                 >
                     About
-                </a>
-                <a
-                    href="#testimonials"
+                </Link>
+                <Link
+                    to="features"
+                    smooth={true}
+                    className="text-base font-medium hover:bg-custom-fade-orange"
+                >
+                    Features
+                </Link>
+                <Link
+                    to="testimonials"
+                    smooth={true}
                     className="text-base font-medium hover:bg-custom-fade-orange"
                 >
                     Testimonials
-                </a>
-                <a
-                    href="#trynow"
+                </Link>
+                <Link
+                    to="trynow"
+                    smooth={true}
                     className="text-base font-medium hover:bg-custom-fade-orange"
                 >
                     Try Now
-                </a>
+                </Link>
             </nav>
             <div className="flex items-center gap-4 max-md:gap-2 text-base">
-                <Button
-                    variant="outline"
-                    className="flex font-semibold max-md:text-sm max-md:px-3 max-md:py-0"
-                >
-                    Log in
+                <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_LOGIN_URL}>
+                    <Button
+                        variant="outline"
+                        className="flex font-semibold max-md:text-sm max-md:px-3 max-md:py-0"
+                    >
+                        Log in
+                    </Button>
+                </a>
+                <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_SIGNUP_URL}>
+                    <Button className="bg-custom-orange text-white font-semibold hover:bg-custom-orange/90 max-md:text-sm flex max-md:px-3 max-md:py-0">
+                        Sign up
                 </Button>
-                <Button className="bg-custom-orange text-white font-semibold hover:bg-custom-orange/90 max-md:text-sm flex max-md:px-3 max-md:py-0">
-                    Sign up
-                </Button>
+                </a>
             </div>
         </header>
     );

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export default function TryNow() {
     return (
-        <section className="py-24 px-4 text-center">
+        <section className="py-24 px-4 text-center" id="trynow">
             <div className="max-w-3xl mx-auto space-y-8">
                 <h1 className="text-4xl max-md:text-3xl font-bold tracking-tight sm:text-5xl">
                     <span className="bg-gradient-to-r from-custom-orange to-custom-orange/40 text-transparent bg-clip-text">
