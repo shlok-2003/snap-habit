@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import SessionWrapper from "@/components/session-provider";
+
+import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +17,10 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased">
-                <ClerkProvider appearance={{}}>{children}</ClerkProvider>
+                <SessionWrapper>
+                    {children}
+                    <Toaster />
+                </SessionWrapper>
             </body>
         </html>
     );

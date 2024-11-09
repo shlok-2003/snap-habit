@@ -11,7 +11,6 @@ import {
     SidebarMenuItem,
     SidebarFooter,
 } from "@/components/ui/sidebar";
-import { SignOutButton } from "@clerk/nextjs";
 
 // Menu items.
 const items = [
@@ -70,11 +69,11 @@ export function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <SignOutButton>
+                <a href="/api/auth/signout">
                     <button className="w-full bg-custom-orange text-white px-4 py-2 rounded-lg font-semibold hover:bg-custom-dark-orange transition-colors">
                         Sign Out
                     </button>
-                </SignOutButton>
+                </a>
             </SidebarFooter>
         </Sidebar>
     );

@@ -1,17 +1,12 @@
-import { SignIn } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
 
 export default async function Page() {
-    const { userId } = await auth();
+    const session = await auth();
 
-    if (userId) {
+    if (session) {
         redirect("/dashboard");
     }
 
-    return (
-        <main className="flex justify-center items-center h-screen">
-            <SignIn />
-        </main>
-    );
+    redirect("/api/auth/signin");
 }

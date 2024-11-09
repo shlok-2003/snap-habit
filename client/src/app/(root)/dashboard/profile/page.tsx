@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/table";
 import { ClipboardCopy, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useUser } from "@clerk/nextjs";
 import Loading from "@/components/ui/loading";
 import {
     Dialog,
@@ -26,6 +25,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 
+import { useAuthenticates } from "@/hooks/use-authenticate";
+
 type Commit = {
     id: number;
     title: string;
@@ -34,7 +35,7 @@ type Commit = {
 };
 
 const ProfilePage = () => {
-    const { user, isLoaded } = useUser();
+    const { session, status } = useAuthenticates();
 
     const [imageUrl, setImageUrl] = useState(
         "/placeholder.svg?height=100&width=100",
@@ -91,7 +92,7 @@ const ProfilePage = () => {
         setCommitToDelete(null);
     };
 
-    if (!user && !isLoaded) return <Loading />;
+    if (status === "loading") return <Loading />;
 
     return (
         <div className="container mx-auto p-4">
@@ -99,15 +100,19 @@ const ProfilePage = () => {
                 <CardContent className="pt-6">
                     <div className="flex flex-col items-center space-y-4">
                         <Avatar className="w-24 h-24">
-                            <AvatarImage
-                                src={user?.imageUrl}
-                                alt="User profile"
-                            />
+                            {session?.user?.image && (
+                                <AvatarImage
+                                    src={session?.user?.image}
+                                    alt="User profile"
+                                />
+                            )}
                             <AvatarFallback>UN</AvatarFallback>
                         </Avatar>
-                        <h2 className="text-2xl font-bold">{user?.fullName}</h2>
+                        <h2 className="text-2xl font-bold">
+                            {session?.user?.name}
+                        </h2>
                         <p className="text-sm text-muted-foreground">
-                            {user?.primaryEmailAddress?.emailAddress}
+                            {session?.user?.email}
                         </p>
                     </div>
                 </CardContent>
