@@ -9,6 +9,7 @@ import {
     CardTitle,
     CardContent,
 } from "@/components/ui/card";
+import { Flame } from "lucide-react";
 
 import Report from "@/components/dashboard/report";
 import DashboardTable from "@/components/dashboard/table";
@@ -37,19 +38,18 @@ export default function Dashboard() {
 
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardDescription>This Week</CardDescription>
+                            <CardDescription>Commits Completed</CardDescription>
                             <CardTitle className="text-4xl">
-                                10000
-                                {rupeeSymbol}
+                                {2} / {10}
                             </CardTitle>
                         </CardHeader>
                     </Card>
                     <Card>
                         <CardHeader className="pb-2">
-                            <CardDescription>This Month</CardDescription>
-                            <CardTitle className="text-4xl">
-                                {rupeeSymbol}
-                                10000
+                            <CardDescription>Daily Streak</CardDescription>
+                            <CardTitle className="text-4xl flex flex-row gap-2 pt-6">
+                                <Flame height={"2.2rem"} width={"2.2rem"} />{" "}
+                                {20}
                             </CardTitle>
                         </CardHeader>
                     </Card>
