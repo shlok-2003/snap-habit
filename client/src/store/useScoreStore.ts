@@ -5,7 +5,7 @@ interface ScoreState {
 }
 
 const useScoreStore = create<ScoreState>(() => ({
-    score: 1000,
+    score: 3000,
 }));
 
 export default useScoreStore;
