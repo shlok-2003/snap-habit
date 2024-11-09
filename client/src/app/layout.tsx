@@ -15,7 +15,19 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className="antialiased">
-                <ClerkProvider appearance={{}}>{children}</ClerkProvider>
+                <ClerkProvider
+                    signInFallbackRedirectUrl={
+                        process.env
+                            .NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL
+                    }
+                    signUpFallbackRedirectUrl={
+                        process.env
+                            .NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL
+                    }
+                    afterSignOutUrl="/"
+                >
+                    {children}
+                </ClerkProvider>
             </body>
         </html>
     );
