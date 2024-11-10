@@ -37,33 +37,13 @@ type Commit = {
 const ProfilePage = () => {
     const { session, status } = useAuthenticates();
 
-    const [imageUrl, setImageUrl] = useState(
-        "/placeholder.svg?height=100&width=100",
-    );
     const [commitToDelete, setCommitToDelete] = useState<Commit | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const { toast } = useToast();
 
     const [commits, setCommits] = useState<Commit[]>([
-        {
-            id: 1,
-            title: "Initial commit",
-            description: "Set up project structure",
-            checked: false,
-        },
-        {
-            id: 2,
-            title: "Add user authentication",
-            description: "Implemented login and registration",
-            checked: false,
-        },
-        {
-            id: 3,
-            title: "Create profile page",
-            description: "Added user profile page with edit functionality",
-            checked: false,
-        },
+        
     ]);
 
     const handleShare = () => {
