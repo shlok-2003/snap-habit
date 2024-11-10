@@ -20,8 +20,9 @@ import CircularProgress from "@/components/ui/circular-progress";
 import { useAuthenticates } from "@/hooks/use-authenticate";
 import {
     GET_USER_DS_COMMIT_COMPLETED_URL,
-    GET_USER_DS_DAILY_STREAK_URL,
+    GET_USER_STREAK_URL,
 } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export default function Dashboard() {
     const { session, status } = useAuthenticates();
@@ -49,9 +50,10 @@ export default function Dashboard() {
                 setTotalCommits(result.length);
 
                 const dailyStreakResponse = await axios.get(
-                    `${GET_USER_DS_DAILY_STREAK_URL}?email=${session?.user?.email}`,
+                    `${GET_USER_STREAK_URL}?email=${session?.user?.email}`,
                 );
-                const dailyStreakResult = dailyStreakResponse.data.dailyStreak;
+                const dailyStreakResult = dailyStreakResponse.data.data.streak;
+                console.log(dailyStreakResult);
                 setDailyStreak(dailyStreakResult);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -95,7 +97,7 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
-                                <Flame className="" /> {dailyStreak}
+                                <Flame className={cn(dailyStreak > 0 && "text-custom-dark-orange fill-custom-dark-orange")} /> {dailyStreak}
                             </CardTitle>
                         </CardHeader>
                     </Card>

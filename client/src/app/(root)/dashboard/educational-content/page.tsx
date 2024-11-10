@@ -3,7 +3,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { MoreVertical, Play } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import Link from "next/link";
 
 interface Video {
