@@ -21,7 +21,11 @@ export default function RootLayout({
         <html lang="en">
             <body className="antialiased">
                 <SessionWrapper>
-                    {children}
+                    {/* <Provider store={store}>
+                        <PersistGate loading={null} persistor={persistor}> */}
+                            {children}
+                        {/* </PersistGate>
+                    </Provider> */}
                     <Toaster />
                 </SessionWrapper>
             </body>

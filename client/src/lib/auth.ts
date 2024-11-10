@@ -18,26 +18,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     callbacks: {
         signIn: async ({ user, profile }) => {
-            console.log({
-                user: user,
-                profile: profile,
-            });
-
             if (!profile?.email) {
                 return false;
             }
 
-            const createUser = await axios.post(SIGN_UP_BACKEND_URL, {
-                email: profile.email,
-                name: profile.name,
-                image: user.image,
-            });
+            try {
+                await axios.post(SIGN_UP_BACKEND_URL, {
+                    email: profile.email,
+                    name: profile.name,
+                    image: user.image,
+                });
 
-            if (createUser.status === 200) {
                 return true;
+            } catch (error) {
+                console.error("Error creating or fetching user:", error);
+                return false;
             }
-
-            return false;
         },
     },
 } satisfies NextAuthConfig);

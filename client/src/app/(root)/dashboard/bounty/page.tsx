@@ -13,7 +13,6 @@ import {
     Award,
     Sticker,
 } from "lucide-react";
-import useScoreStore from "@/store/useScoreStore";
 
 const bountyArr = [
     {
@@ -68,7 +67,7 @@ const bountyArr = [
 ];
 
 const BountyPage = () => {
-    const score = useScoreStore((state) => state.score);
+    const score = 3000;
 
     return (
         <div className="min-h-screen bg-background p-6">

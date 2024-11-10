@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import axios from "axios";
+import { Flame } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -9,22 +12,54 @@ import {
     CardTitle,
     CardContent,
 } from "@/components/ui/card";
-import { Flame } from "lucide-react";
 
 import Loading from "@/components/ui/loading";
 import LinearChart from "@/components/ui/linear-chart";
 import CircularProgress from "@/components/ui/circular-progress";
+
 import { useAuthenticates } from "@/hooks/use-authenticate";
+import {
+    GET_USER_DS_COMMIT_COMPLETED_URL,
+    GET_USER_DS_DAILY_STREAK_URL,
+} from "@/lib/constants";
 
 export default function Dashboard() {
     const { session, status } = useAuthenticates();
 
     const [commitsCompleted, setCommitsCompleted] = useState<number>(0);
+    const [totalCommits, setTotalCommits] = useState<number>(0);
     const [dailyStreak, setDailyStreak] = useState<number>(0);
 
-    if (status === "loading") return <Loading />;
+    useEffect(() => {
+        if (status === "loading") return;
 
-    console.log(session);
+        const fetch = async () => {
+            try {
+                const response = await axios.get(
+                    `${GET_USER_DS_COMMIT_COMPLETED_URL}?email=${session?.user?.email}`,
+                );
+                const result = response.data.posts;
+
+                const completed = result.filter(
+                    (post: any) => post.isCompleted,
+                );
+                setCommitsCompleted(completed.length);
+                setTotalCommits(result.length);
+
+                const dailyStreakResponse = await axios.get(
+                    `${GET_USER_DS_DAILY_STREAK_URL}?email=${session?.user?.email}`,
+                );
+                const dailyStreakResult = dailyStreakResponse.data.dailyStreak;
+                setDailyStreak(dailyStreakResult);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetch();
+    }, [status, session?.user?.email]);
+
+    if (status === "loading") return <Loading />;
 
     return (
         <main className="grid items-start gap-4 p-0 sm:p-4 sm:px-6 sm:py-0 md:gap-8 w-full">
@@ -50,7 +85,7 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Commits Completed</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl">
-                                {2} / {10}
+                                {commitsCompleted} / {totalCommits}
                             </CardTitle>
                         </CardHeader>
                     </Card>
@@ -58,7 +93,7 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
-                                <Flame className="" /> {20}
+                                <Flame className="" /> {dailyStreak}
                             </CardTitle>
                         </CardHeader>
                     </Card>
@@ -71,7 +106,13 @@ export default function Dashboard() {
                                 <CardTitle>Daily Score</CardTitle>
                             </CardHeader>
                             <CircularProgress
-                                progress={61}
+                                progress={
+                                    (commitsCompleted /
+                                        (totalCommits == 0
+                                            ? 1
+                                            : totalCommits)) *
+                                    100
+                                }
                                 className="flex justify-center items-center"
                             />
                         </CardContent>

@@ -34,7 +34,7 @@ export default function CircularProgress({
                     className="transform -rotate-90"
                 >
                     <circle
-                        stroke="#"
+                        stroke="var(--custom-fade-orange"
                         fill="transparent"
                         strokeWidth={strokeWidth}
                         strokeLinecap="round"
