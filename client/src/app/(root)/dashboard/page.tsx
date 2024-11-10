@@ -34,11 +34,14 @@ export default function Dashboard() {
         const fetch = async () => {
             try {
                 const response = await axios.get(`${GET_USER_DS_COMMIT_COMPLETED_URL}?email=${session?.user?.email}`);
-                const result = response.data.posts;
+                const result = response.data.data;
                 
+                console.log(result);
                 const completed = result.filter((post: any) => post.isCompleted);
+                console.log(completed);
                 setCommitsCompleted(completed.length);
                 setTotalCommits(result.length);
+
 
                 const dailyStreakResponse = await axios.get(`${GET_USER_DS_DAILY_STREAK_URL}?email=${session?.user?.email}`);
                 const dailyStreakResult = dailyStreakResponse.data.dailyStreak;
@@ -49,7 +52,7 @@ export default function Dashboard() {
         }
 
         fetch();
-    }, [status, session?.user?.email])
+    }, [status, session])
     
     if (status === "loading") return <Loading />;
 

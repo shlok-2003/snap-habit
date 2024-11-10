@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +15,9 @@ import {
     Award,
     Sticker,
 } from "lucide-react";
+import Loading from "@/components/ui/loading";
+import { GET_USER_URL } from "@/lib/constants";
+import { useAuthenticates } from "@/hooks/use-authenticate";
 
 const bountyArr = [
     {
@@ -20,54 +25,69 @@ const bountyArr = [
         description: "We will plant one tree on your behalf",
         icon: <TreePine className="h-8 w-8" />,
         points: 70,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/plant-a-tree.avif",
     },
     {
         title: "Snap-Habit T Shirt",
         description: "Redeem high quality t-shirts",
         icon: <Shirt className="h-8 w-8" />,
         points: 5000,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/tshirt.jpeg",
     },
     {
         title: "Snap-Habit Cap",
         description: "Redeem high quality cap",
         icon: <ShoppingBag className="h-8 w-8" />,
         points: 6000,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/tshirt-cap.jpeg",
     },
     {
         title: "Premium Bundle",
         description: "T-shirt + Cap",
         icon: <Star className="h-8 w-8" />,
         points: 8000,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/tshirt-cap.jpeg",
     },
     {
         title: "Digital Badge",
         description: "Exclusive Snap-habit Badge",
         icon: <Award className="h-8 w-8" />,
         points: 2000,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/badge.jpeg",
     },
     {
         title: "Mystery Box",
         description: "Random Premium Reward",
         icon: <Gift className="h-8 w-8" />,
         points: 5500,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/mystery-box.jpeg",
     },
     {
         title: "Premium Stickers",
         description: "Limited Edition Pack",
         icon: <Sticker className="h-8 w-8" />,
         points: 1500,
-        image: "/placeholder.svg?height=200&width=200",
+        image: "/images/green-stickers.jpg",
     },
 ];
 
 const BountyPage = () => {
-    const score = 3000;
+    const { session, status } = useAuthenticates();
+
+    const [score, setScore] = useState(0);
+
+    useEffect(() => {
+        if (status === "loading") return;
+
+        const getScore = async () => {
+            const response = await axios.get(`${GET_USER_URL}?email=${session?.user?.email}`);
+            setScore(response.data.data.score);
+        };
+
+        getScore();
+    }, [status, session]);
+
+    if (status === "loading") return <Loading />;
 
     return (
         <div className="min-h-screen bg-background p-6">
@@ -80,7 +100,7 @@ const BountyPage = () => {
                 <CardContent>
                     <div className="flex items-center gap-2">
                         <div className="h-6 w-6 rounded-full bg-yellow-500" />
-                        <span className="text-3xl font-bold">263</span>
+                        <span className="text-3xl font-bold">{score}</span>
                     </div>
                 </CardContent>
             </Card>
@@ -96,7 +116,7 @@ const BountyPage = () => {
                                     src={item.image}
                                     alt={item.title}
                                     layout="fill"
-                                    objectFit="cover"
+                                    objectFit="contain"
                                     className="transition-transform duration-300 ease-in-out hover:scale-105"
                                 />
                             </div>
