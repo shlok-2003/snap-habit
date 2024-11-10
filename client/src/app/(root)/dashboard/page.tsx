@@ -2,7 +2,7 @@
 "use client";
 
 import axios from "axios";
-import { Flame } from "lucide-react";
+import { Activity, Flame, Footprints, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import {
@@ -19,10 +19,22 @@ import CircularProgress from "@/components/ui/circular-progress";
 
 import { useAuthenticates } from "@/hooks/use-authenticate";
 import {
+    GET_FIT_ACTIVITIES_URL,
+    GET_FIT_CALORIES_URL,
+    GET_FIT_SLEEP_URL,
+    GET_FIT_STEPS_URL,
     GET_USER_DS_COMMIT_COMPLETED_URL,
     GET_USER_STREAK_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { makeAuthenticatedRequest } from "@/lib/axios-config";
+
+interface FitnessData {
+    steps: number;
+    activities: string;
+    sleep: number;
+    calories: number;
+}
 
 export default function Dashboard() {
     const { session, status } = useAuthenticates();
@@ -30,6 +42,39 @@ export default function Dashboard() {
     const [commitsCompleted, setCommitsCompleted] = useState<number>(0);
     const [totalCommits, setTotalCommits] = useState<number>(0);
     const [dailyStreak, setDailyStreak] = useState<number>(0);
+    const [fitnessData, setFitnessData] = useState<FitnessData>({
+        steps: 0,
+        activities: "",
+        sleep: 0,
+        calories: 0,
+    });
+
+    const healthData = [
+        {
+            title: "Steps",
+            icon: Footprints,
+            value: "10,234",
+            color: "text-blue-500",
+        },
+        {
+            title: "Activities",
+            icon: Activity,
+            value: "5 hours",
+            color: "text-green-500",
+        },
+        {
+            title: "Sleep",
+            icon: Moon,
+            value: "7h 24m",
+            color: "text-purple-500",
+        },
+        {
+            title: "Calories",
+            icon: Flame,
+            value: "2,543",
+            color: "text-orange-500",
+        },
+    ];
 
     useEffect(() => {
         if (status === "loading") return;
@@ -55,6 +100,24 @@ export default function Dashboard() {
                 const dailyStreakResult = dailyStreakResponse.data.data.streak;
                 console.log(dailyStreakResult);
                 setDailyStreak(dailyStreakResult);
+
+                const gFittSteps = await makeAuthenticatedRequest(GET_FIT_STEPS_URL);
+                const gFittActivities = await makeAuthenticatedRequest(GET_FIT_ACTIVITIES_URL);
+                const gFittSleep = await makeAuthenticatedRequest(GET_FIT_SLEEP_URL);
+                const gFittCalories = await makeAuthenticatedRequest(GET_FIT_CALORIES_URL);
+
+                setFitnessData({
+                    steps: gFittSteps.steps[gFittSteps.steps.length - 1].value,
+                    activities: gFittActivities.activities[gFittActivities.activities.length - 1].activities[0].type,
+                    sleep: 0,
+                    calories: gFittCalories.calories[gFittCalories.calories.length - 1].value,
+                });
+                console.log({
+                    gFittSteps,
+                    gFittActivities,
+                    gFittSleep,
+                    gFittCalories,
+                });
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -97,13 +160,39 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
-                                <Flame className={cn(dailyStreak > 0 && "text-custom-dark-orange fill-custom-dark-orange")} /> {dailyStreak}
+                                <Flame
+                                    className={cn(
+                                        dailyStreak > 0 &&
+                                            "text-custom-dark-orange fill-custom-dark-orange",
+                                    )}
+                                />{" "}
+                                {dailyStreak}
                             </CardTitle>
                         </CardHeader>
                     </Card>
                 </div>
-
-                <div className="flex md:flex-row gap-4 flex-col">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {Object.entries(fitnessData).map(([key, value]) => (
+                        <Card key={key} className="overflow-hidden">
+                            <CardHeader
+                                className={`flex flex-row items-center justify-between space-y-0 pb-2 text-custom-dark-orange`}
+                            >
+                                <CardTitle className="text-sm font-medium">
+                                    {key}
+                                </CardTitle>
+                                {/* <item.icon className="h-4 w-4" /> */}
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">
+                                    {value}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+                
+                <div className="flex md:flex-row gap-4 flex-col pb-5">
                     <Card className="flex-1">
                         <CardContent className="font-medium h-full relative">
                             <CardHeader>
@@ -141,8 +230,6 @@ export default function Dashboard() {
                         </CardContent>
                     </Card>
                 </div>
-
-                <div className="grid lg:grid-cols-3 gap-4"></div>
             </div>
         </main>
     );

@@ -19,10 +19,25 @@ import {
     FOLLOW_USERS_URL,
     GET_ALL_USERS_URL,
     GET_FOLLOWER_URL,
+    GET_FOLLOWING_URL,
 } from "@/lib/constants";
 import Loading from "@/components/ui/loading";
+import { Session } from "next-auth";
 
-const UserCard = ({ user, onClick }) => (
+interface User {
+    _id: string;
+    name: string;
+    email: string;
+    image: string;
+    score: number;
+}
+
+interface UserCardProps {
+    user: User;
+    onClick: () => void;
+}
+
+const UserCard = ({ user, onClick }: UserCardProps) => (
     <Card
         className="w-full max-w-sm cursor-pointer transition-all duration-300 hover:shadow-lg"
         onClick={onClick}
@@ -31,18 +46,18 @@ const UserCard = ({ user, onClick }) => (
             <div className="flex items-center space-x-4">
                 <Avatar className="h-12 w-12">
                     <AvatarImage
-                        src={user.imageUrl || "/placeholder.svg"}
-                        alt={user.fullName}
+                        src={user.image || "/placeholder.svg"}
+                        alt={user.name}
                     />
                     <AvatarFallback>
-                        {user.fullName.slice(0, 2).toUpperCase()}
+                        {user.name.slice(0, 2).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
-                    <h3 className="font-semibold">{user.fullName}</h3>
+                    <h3 className="font-semibold">{user.name}</h3>
                     <div className="flex items-center text-sm text-muted-foreground">
                         <Mail className="mr-1 h-4 w-4" />
-                        {user.primaryEmailAddress.emailAddress}
+                        {user.email}
                     </div>
                 </div>
             </div>
@@ -50,7 +65,13 @@ const UserCard = ({ user, onClick }) => (
     </Card>
 );
 
-const UserDialog = ({ user, isOpen, setIsOpen }) => (
+interface UserDialogProps {
+    user: User;
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+}
+
+const UserDialog = ({ user, isOpen, setIsOpen }: UserDialogProps) => (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -60,18 +81,18 @@ const UserDialog = ({ user, isOpen, setIsOpen }) => (
                 <div className="flex justify-center">
                     <Avatar className="h-24 w-24">
                         <AvatarImage
-                            src={user.imageUrl || "/placeholder.svg"}
-                            alt={user.fullName}
+                            src={user.image || "/placeholder.svg"}
+                            alt={user.name}
                         />
                         <AvatarFallback>
-                            {user.fullName.slice(0, 2).toUpperCase()}
+                            {user.name.slice(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                 </div>
                 <div className="grid gap-2">
                     <div className="font-semibold">{user.fullName}</div>
                     <div className="text-sm text-muted-foreground">
-                        {user.primaryEmailAddress.emailAddress}
+                        {user.email}
                     </div>
                     <div className="flex items-center">
                         <Star className="mr-2 h-4 w-4 text-yellow-500" />
@@ -83,47 +104,71 @@ const UserDialog = ({ user, isOpen, setIsOpen }) => (
     </Dialog>
 );
 
-const FollowDialog = ({ users, isOpen, setIsOpen, onFollow }) => (
+interface FollowDialogProps {
+    users: User[];
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+    onFollow: (user: User) => void;
+    session: Session;
+}
+
+const FollowDialog = ({
+    users,
+    isOpen,
+    setIsOpen,
+    onFollow,
+    session,
+}: FollowDialogProps) => (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>Follow Other Users</DialogTitle>
             </DialogHeader>
             <div className="max-h-[60vh] overflow-y-auto">
-                {users.map((user, index) => (
-                    <div
-                        key={index}
-                        className="flex items-center justify-between py-4"
-                    >
-                        <div className="flex items-center space-x-4">
-                            <Avatar className="h-10 w-10">
-                                <AvatarImage
-                                    src={user.imageUrl || "/placeholder.svg"}
-                                    alt={user.fullName}
-                                />
-                                <AvatarFallback>
-                                    {user.fullName.slice(0, 2).toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <h4 className="font-semibold">
-                                    {user.fullName}
-                                </h4>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                    <Star className="mr-1 h-3 w-3 text-yellow-500" />
-                                    <span>Score: {user.score}</span>
+                {users &&
+                    users?.map((user, index) => {
+                        if (session.user?.email === user.email) return null;
+
+                        return (
+                            <div
+                                key={index}
+                                className="flex items-center justify-between py-4"
+                            >
+                                <div className="flex items-center space-x-4">
+                                    <Avatar className="h-10 w-10">
+                                        <AvatarImage
+                                            src={
+                                                user.image || "/placeholder.svg"
+                                            }
+                                            alt={user.name}
+                                        />
+                                        <AvatarFallback>
+                                            {user?.name &&
+                                                user.name
+                                                    .slice(0, 2)
+                                                    .toUpperCase()}
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <h4 className="font-semibold">
+                                            {user.name}
+                                        </h4>
+                                        <div className="flex items-center text-sm text-muted-foreground">
+                                            <Star className="mr-1 h-3 w-3 text-yellow-500" />
+                                            <span>Score: {user.score}</span>
+                                        </div>
+                                    </div>
                                 </div>
+                                <Button
+                                    onClick={() => onFollow(user)}
+                                    variant="outline"
+                                    size="sm"
+                                >
+                                    Follow
+                                </Button>
                             </div>
-                        </div>
-                        <Button
-                            onClick={() => onFollow(user)}
-                            variant="outline"
-                            size="sm"
-                        >
-                            Follow
-                        </Button>
-                    </div>
-                ))}
+                        );
+                    })}
             </div>
         </DialogContent>
     </Dialog>
@@ -143,20 +188,29 @@ const UsersComponent = () => {
     useEffect(() => {
         if (!session) return;
         const fetchData = async () => {
-            const { data } = await axios.get(
-                `${GET_FOLLOWER_URL}/${session?.user?.id}`,
-            );
+            try {
+                const { data } = await axios.get(
+                    `${GET_FOLLOWING_URL}?email=${session?.user?.email}`,
+                );
+                const { data: allUsers } = await axios.get(
+                    `${GET_ALL_USERS_URL}`,
+                );
 
-            const { data: allUsers } = await axios.get(`${GET_ALL_USERS_URL}`);
+                setResult(data.data);
+                setAllUsers(allUsers.data);
 
-            setResult(data);
-            setAllUsers(allUsers);
+                console.log(allUsers.data, "allUsers");
+                console.log(data.data, "data");
+            } catch (error) {
+                console.error(error);
+            }
         };
         fetchData();
-    });
+    }, [session]);
 
-    const filteredUsers = result.users.filter((user) =>
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase()),
+    console.log(result);
+    const filteredUsers = result.users?.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     const handleUserClick = (user) => {
@@ -171,10 +225,14 @@ const UsersComponent = () => {
     const handleFollow = async (user) => {
         // Implement follow logic here
         if (!session && !user) return;
-        const { data } = await axios.post(
-            `${FOLLOW_USERS_URL}/${user.id}?email=${session?.user?.email}`,
-        );
-        console.log(`Following ${data}`);
+        try {
+            const { data } = await axios.post(
+                `${FOLLOW_USERS_URL}/${user._id}?email=${session?.user?.email}`,
+            );
+            console.log(`Following ${data}`);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     if (status === "loading") return <Loading />;
@@ -205,8 +263,8 @@ const UsersComponent = () => {
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {filteredUsers.length > 0 ? (
-                        filteredUsers.map((user, index) => (
+                    {filteredUsers?.length > 0 ? (
+                        filteredUsers?.map((user, index) => (
                             <UserCard
                                 key={index}
                                 user={user}
@@ -240,6 +298,7 @@ const UsersComponent = () => {
                 isOpen={isFollowDialogOpen}
                 setIsOpen={setIsFollowDialogOpen}
                 onFollow={handleFollow}
+                session={session}
             />
         </Fragment>
     );

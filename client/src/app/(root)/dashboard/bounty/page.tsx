@@ -77,15 +77,21 @@ const BountyPage = () => {
     const [score, setScore] = useState(0);
 
     useEffect(() => {
-        if (status === "loading") return;
+        if (!session) return;
 
         const getScore = async () => {
-            const response = await axios.get(`${GET_USER_URL}?email=${session?.user?.email}`);
-            setScore(response.data.data.score);
+            try {   
+                const response = await axios.get(
+                    `${GET_USER_URL}?email=${session?.user?.email}`,
+                );
+                setScore(response.data.data.score);
+            } catch (error) {
+                console.error(error);
+            }
         };
 
         getScore();
-    }, [status, session]);
+    }, [session]);
 
     if (status === "loading") return <Loading />;
 

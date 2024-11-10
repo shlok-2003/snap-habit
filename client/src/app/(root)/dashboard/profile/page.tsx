@@ -19,7 +19,7 @@ import {
 
 import { useAuthenticates } from "@/hooks/use-authenticate";
 import axios from "axios";
-import { GET_USER_DS_COMMIT_COMPLETED_URL } from "@/lib/constants";
+import { GET_FOLLOWER_URL, GET_FOLLOWING_URL, GET_USER_DS_COMMIT_COMPLETED_URL } from "@/lib/constants";
 import Image from "next/image";
 import WebcamComponent from "@/components/ui/webcam";
 import { cn } from "@/lib/utils";
@@ -40,6 +40,8 @@ const ProfilePage = () => {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const [commits, setCommits] = useState<Commit[]>([]);
+    const [followerCount, setFollowerCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
     const handleShare = () => {
         const profileUrl = `${window.location.origin}/profile/username`;
@@ -80,6 +82,16 @@ const ProfilePage = () => {
                 const result = response.data.data;
                 console.log(response);
                 setCommits(result);
+
+                const followerResponse = await axios.get(
+                    `${GET_FOLLOWER_URL}?email=${session?.user?.email}`,
+                );
+                setFollowerCount(followerResponse.data.data.length);
+
+                const followingResponse = await axios.get(
+                    `${GET_FOLLOWING_URL}?email=${session?.user?.email}`,
+                );
+                setFollowingCount(followingResponse.data.data.length);
             } catch (error) {
                 console.log(error);
             }
@@ -121,11 +133,11 @@ const ProfilePage = () => {
 
             <div className="mt-6 flex justify-center space-x-8">
                 <div className="text-center">
-                    <p className="text-2xl font-bold">1.5K</p>
+                    <p className="text-2xl font-bold">{followerCount}</p>
                     <p className="text-sm text-muted-foreground">Followers</p>
                 </div>
                 <div className="text-center">
-                    <p className="text-2xl font-bold">500</p>
+                    <p className="text-2xl font-bold">{followingCount}</p>
                     <p className="text-sm text-muted-foreground">Following</p>
                 </div>
             </div>
