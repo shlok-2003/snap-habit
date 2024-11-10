@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,6 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import { Search, Mail, UserPlus, Star } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
+import { useAuthenticates } from "@/hooks/use-authenticate";
+import {
+    FOLLOW_USERS_URL,
+    GET_ALL_USERS_URL,
+    GET_FOLLOWER_URL,
+} from "@/lib/constants";
+import Loading from "@/components/ui/loading";
 
 const UserCard = ({ user, onClick }) => (
     <Card
@@ -122,33 +130,30 @@ const FollowDialog = ({ users, isOpen, setIsOpen, onFollow }) => (
 );
 
 const UsersComponent = () => {
+    const { session, status } = useAuthenticates();
+
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
     const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
     const [isFollowDialogOpen, setIsFollowDialogOpen] = useState(false);
 
-    const result = {
-        users: [
-            {
-                imageUrl: "",
-                fullName: "Sanskar",
-                primaryEmailAddress: { emailAddress: "sanskarv2004@gmail.com" },
-                score: 85,
-            },
-            {
-                imageUrl: "",
-                fullName: "John",
-                primaryEmailAddress: { emailAddress: "john@example.com" },
-                score: 92,
-            },
-            {
-                imageUrl: "",
-                fullName: "Doe",
-                primaryEmailAddress: { emailAddress: "doe@example.com" },
-                score: 78,
-            },
-        ],
-    };
+    const [result, setResult] = useState([]); // set followers
+    const [allUsers, setAllUsers] = useState([]); // set all Users
+
+    useEffect(() => {
+        if (!session) return;
+        const fetchData = async () => {
+            const { data } = await axios.get(
+                `${GET_FOLLOWER_URL}/${session?.user?.id}`,
+            );
+
+            const { data: allUsers } = await axios.get(`${GET_ALL_USERS_URL}`);
+
+            setResult(data);
+            setAllUsers(allUsers);
+        };
+        fetchData();
+    });
 
     const filteredUsers = result.users.filter((user) =>
         user.fullName.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -163,10 +168,16 @@ const UsersComponent = () => {
         setIsFollowDialogOpen(true);
     };
 
-    const handleFollow = (user) => {
+    const handleFollow = async (user) => {
         // Implement follow logic here
-        console.log(`Following ${user.fullName}`);
+        if (!session && !user) return;
+        const { data } = await axios.post(
+            `${FOLLOW_USERS_URL}/${user.id}?email=${session?.user?.email}`,
+        );
+        console.log(`Following ${data}`);
     };
+
+    if (status === "loading") return <Loading />;
 
     return (
         <Fragment>
@@ -225,7 +236,7 @@ const UsersComponent = () => {
                 />
             )}
             <FollowDialog
-                users={result.users}
+                users={allUsers}
                 isOpen={isFollowDialogOpen}
                 setIsOpen={setIsFollowDialogOpen}
                 onFollow={handleFollow}
