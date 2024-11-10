@@ -16,7 +16,7 @@ import {
 // import Translation from "../ui/translation";
 import { useAuthenticates } from "@/hooks/use-authenticate";
 import Loading from "../ui/loading";
-
+import Image from "next/image";
 
 export default function Header() {
     const { session, status } = useAuthenticates();
@@ -53,10 +53,13 @@ export default function Header() {
                 {/* <Translation /> */}
                 <ToggleMode className="size-7 rounded-xl" />
                 {session?.user?.image ? (
-                    <img
+                    <Image
                         src={session?.user?.image}
                         alt="User profile"
-                        className="size-7 rounded-full"
+                        width={40}
+                        height={40}
+                        objectFit="cover"
+                        style={{ borderRadius: "50%" }}
                     />
                 ) : (
                     <Skeleton className="size-7 rounded-full" />

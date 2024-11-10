@@ -24,10 +24,6 @@ export default function Dashboard() {
 
     if (status === "loading") return <Loading />;
 
-    useEffect(() => {
-        
-    })
-
     console.log(session);
 
     return (
@@ -62,8 +58,7 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
-                                <Flame className="" />{" "}
-                                {20}
+                                <Flame className="" /> {20}
                             </CardTitle>
                         </CardHeader>
                     </Card>
@@ -102,9 +97,7 @@ export default function Dashboard() {
                     </Card>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-4">
-                    
-                </div>
+                <div className="grid lg:grid-cols-3 gap-4"></div>
             </div>
         </main>
     );
