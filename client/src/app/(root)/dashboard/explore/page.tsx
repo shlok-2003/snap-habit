@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -12,80 +12,131 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import {
+    COMMIT_RITUAL_URL,
+    CREATE_RITUAL_URL,
+    GET_RITUALS_URL,
+} from "@/lib/constants";
+import { useAuthenticates } from "@/hooks/use-authenticate";
+import { toast } from "@/hooks/use-toast";
+import Loading from "@/components/ui/loading";
+
+interface Ritual {
+    title: string;
+    content: string;
+    caption: string;
+}
+
+type RitualWithScore = Ritual & { score: number };
 
 export default function Component() {
-    const rituals = [
-        {
-            title: "Drink Water",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-        {
-            title: "Watch Sunrise",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-        {
-            title: "Breakfast",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-        {
-            title: "Walk pet 🐕",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-        {
-            title: "Yoga morning",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-        {
-            title: "Coffee time ☕",
-            image: "/placeholder.svg?height=200&width=300",
-            description: "sdfsdfsdf",
-        },
-    ];
+    const { session, status } = useAuthenticates();
 
+    const [ritual, setRitual] = useState<RitualWithScore[]>([]);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState<File | null>(null);
     const [opennewRitual, setOpenNewRitual] = useState(false);
+
     const [openSelectedRitual, setOpenSelectedRitual] = useState(false);
 
-    const [selectedRitual, setSelectedRitual] = useState({
-        title: "",
-        description: "",
-        image: "",
-    });
-
-    const [newRitual, setNewRitual] = useState(rituals);
+    const [selectedRitual, setSelectedRitual] = useState<RitualWithScore | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setImage(URL.createObjectURL(file));
+            setImage(file);
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (status === "loading") return;
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("caption", description);
+        if (image) {
+            formData.append("content", image);
+        }
+
         const newRitualObject = {
             title,
-            image: image || "/placeholder.svg?height=200&width=300",
-            description,
+            content: image,
+            caption: description,
         };
-        setNewRitual([...rituals, newRitualObject]);
+
+        await axios.post(
+            `${CREATE_RITUAL_URL}?email=${session?.user?.email}`,
+            newRitualObject,
+            {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
+        );
+
+        toast({
+            title: "Ritual Created Successfully",
+            description: "You can now view your ritual in your dashboard",
+            variant: "default",
+        });
+
         setTitle("");
         setDescription("");
-        setImage("");
+        setImage(null);
         setOpenNewRitual(false);
     };
 
     const openFileExplorer = () => {
         fileInputRef.current?.click();
     };
+
+    const handleCommitRitual = async () => {
+        if (status === "loading") return;
+
+        console.log("selectedRitual", selectedRitual);
+
+        try {
+            await axios.post(`${COMMIT_RITUAL_URL}?email=${session?.user?.email}`, {
+                title: selectedRitual?.title,
+                caption: selectedRitual?.caption,
+                content: selectedRitual?.content,
+                score: selectedRitual?.score,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+
+        toast({
+            title: "Ritual Added Successfully",
+            description: "You can preview view your ritual in your dashboard",
+            variant: "default",
+        });
+        setOpenSelectedRitual(false);
+    };
+
+    useEffect(() => {
+        if (!session) return;
+
+        const fetchRituals = async () => {
+            try {
+                const response = await axios.get(
+                    `${GET_RITUALS_URL}?email=levelupmonk18@gmail.com`,
+            );
+            const result = response.data.data;
+                // console.log(response.data);
+                setRitual(result);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchRituals();
+    }, [session]);
+
+    if (status === "loading") return <Loading />;
 
     return (
         <div className="min-h-screen bg-white p-4">
@@ -100,12 +151,13 @@ export default function Component() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {newRitual.map((ritual, index) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ritual.map((ritual, index) => (
                     <Card
                         key={index}
                         className="overflow-hidden border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
                         onClick={() => {
+                            console.log(ritual);
                             setSelectedRitual(ritual);
                             setOpenSelectedRitual(true);
                         }}
@@ -113,9 +165,9 @@ export default function Component() {
                         <CardContent className="p-0">
                             <div className="relative h-32 w-full">
                                 <Image
-                                    src={ritual.image}
+                                    src={ritual.content}
                                     alt={`Image of ${ritual.title}`}
-                                    className="object-cover"
+                                    className="object-cover rounded-lg"
                                     fill
                                 />
                             </div>
@@ -146,12 +198,15 @@ export default function Component() {
 
                         <div className="space-y-6">
                             <div className="relative h-64 w-full rounded-lg overflow-hidden">
-                                <Image
-                                    src={selectedRitual.image}
-                                    alt={`Selected Ritual: ${selectedRitual.title}`}
-                                    className="object-cover"
-                                    fill
-                                />
+                                {selectedRitual && (
+                                    <Image
+                                        src={selectedRitual.content}
+                                        alt={`Selected Ritual: ${selectedRitual.title}`}
+                                        className="object-cover rounded-lg"
+                                        fill
+                                        objectFit="cover"
+                                    />
+                                )}
                             </div>
 
                             <div>
@@ -159,7 +214,7 @@ export default function Component() {
                                     {selectedRitual.title}
                                 </h2>
                                 <p className="text-sm text-gray-700">
-                                    {selectedRitual.description}
+                                    {selectedRitual.caption}
                                 </p>
                                 <div className="flex items-center gap-1 text-sm text-gray-600">
                                     {/* Additional content if needed */}
@@ -171,7 +226,7 @@ export default function Component() {
                             <Button
                                 className="w-full"
                                 size="lg"
-                                onClick={() => setSelectedRitual(null)} // Close dialog on button click
+                                onClick={() => handleCommitRitual()} // Close dialog on button click
                             >
                                 Commit to Ritual
                             </Button>
@@ -206,23 +261,26 @@ export default function Component() {
 
                     <div className="space-y-6">
                         <div className="relative h-64 w-full rounded-lg overflow-hidden">
-                            <div>
-                                <Button onClick={openFileExplorer}>
-                                    Add Image
-                                </Button>
+                            <div className="flex items-center justify-center h-full">
+                                {image === null && (
+                                    <Button onClick={openFileExplorer}>
+                                        Add Image
+                                    </Button>
+                                )}
                                 <input
                                     ref={fileInputRef}
                                     type="file"
+                                    name="content"
                                     accept="image/*"
                                     className="hidden"
                                     onChange={handleImageChange}
                                 />
                                 {image && (
                                     <Image
-                                        src={image}
+                                        src={URL.createObjectURL(image)}
                                         alt="Selected Ritual"
                                         layout="fill"
-                                        objectFit="cover"
+                                        objectFit="contain"
                                     />
                                 )}
                             </div>
@@ -267,19 +325,3 @@ export default function Component() {
         </div>
     );
 }
-
-// <style>
-//   @keyframes bounce-slow {
-//     0%, 100% {
-//       transform: translateY(-25%);
-//       animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-//     }
-//     50% {
-//       transform: translateY(0);
-//       animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-//     }
-//   }
-//   .animate-bounce-slow {
-//     animation: bounce-slow 3s infinite;
-//   }
-// </style>

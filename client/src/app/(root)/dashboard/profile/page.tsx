@@ -1,20 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { ClipboardCopy, Trash2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Camera, ClipboardCopy, Delete, Trash2 } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 import Loading from "@/components/ui/loading";
 import {
     Dialog,
@@ -26,12 +18,15 @@ import {
 } from "@/components/ui/dialog";
 
 import { useAuthenticates } from "@/hooks/use-authenticate";
+import axios from "axios";
+import { GET_USER_DS_COMMIT_COMPLETED_URL } from "@/lib/constants";
+import Image from "next/image";
 
 type Commit = {
     id: number;
     title: string;
-    description: string;
-    checked: boolean;
+    caption: string;
+    content: string;
 };
 
 const ProfilePage = () => {
@@ -40,11 +35,7 @@ const ProfilePage = () => {
     const [commitToDelete, setCommitToDelete] = useState<Commit | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    const { toast } = useToast();
-
-    const [commits, setCommits] = useState<Commit[]>([
-        
-    ]);
+    const [commits, setCommits] = useState<Commit[]>([]);
 
     const handleShare = () => {
         const profileUrl = `${window.location.origin}/profile/username`;
@@ -56,6 +47,10 @@ const ProfilePage = () => {
             });
         });
     };
+
+    // const [openedComit, setOpenedComit] = useState<Comit>()
+    const [image, setImage] = useState<File | null>(null);
+    const handleFileInput = useRef<HTMLInputElement>(null);
 
     const handleDeleteClick = (commit: Commit) => {
         setCommitToDelete(commit);
@@ -71,6 +66,38 @@ const ProfilePage = () => {
         setIsDeleteDialogOpen(false);
         setCommitToDelete(null);
     };
+
+    // const handleImageClick = async () => {
+
+    // }
+
+    const handleCameraClick = () => {
+        handleFileInput.current?.click();
+    }
+
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setImage(event.target.files[0]);
+        }
+    };
+
+    useEffect(() => {
+        if (!session) return;
+
+        const fetchCommits = async () => {
+            try {
+                const response = await axios.get(
+                    `${GET_USER_DS_COMMIT_COMPLETED_URL}?email=${session?.user?.email}`,
+                );
+                const result = response.data.data;
+                console.log(response);
+                setCommits(result);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchCommits();
+    }, [session]);
 
     if (status === "loading") return <Loading />;
 
@@ -116,42 +143,44 @@ const ProfilePage = () => {
             </div>
 
             <div className="mt-8">
-                <h3 className="text-xl font-bold mb-4">All Commits</h3>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Title</TableHead>
-                            <TableHead>Description</TableHead>
-                            <TableHead>Delete</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {commits.map((commit) => (
-                            <TableRow
-                                key={commit.id}
-                                className={
-                                    commit.checked
-                                        ? "line-through opacity-50"
-                                        : ""
-                                }
-                            >
-                                <TableCell>{commit.title}</TableCell>
-                                <TableCell>{commit.description}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() =>
-                                            handleDeleteClick(commit)
-                                        }
-                                    >
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <h3 className="text-xl font-bold mb-4">All Rituals</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {commits.map((commit, index) => (
+                        <Card
+                            key={index}
+                            className="overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                        >
+                            <CardContent className="p-0">
+                                <div className="relative h-32 w-full">
+                                    <Image
+                                        src={commit.content}
+                                        alt={`Image of ${commit.title}`}
+                                        className="object-cover"
+                                        fill
+                                    />
+                                    <Trash2 className="absolute top-2 left-2 h-6 w-6 text-red-600 bg-black rounded-full p-1 cursor-pointer" />
+                                    <Camera className="absolute top-2 right-2 h-6 w-6 text-white bg-black rounded-full p-1 cursor-pointer" onClick={handleCameraClick}/>
+                                    <input 
+                                        type="file"
+                                        accept="image/*"
+                                        capture="environment"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                        ref={handleFileInput}
+                                    />
+                                </div>
+                                <div className="p-3 space-y-2">
+                                    <h3 className="font-medium text-sm text-gray-800">
+                                        {commit.title}
+                                    </h3>
+                                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                                        {/* Additional content if needed */}
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
             </div>
             <Dialog
                 open={isDeleteDialogOpen}
