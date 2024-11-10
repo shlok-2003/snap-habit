@@ -93,7 +93,7 @@ export default function About() {
                     className="flex justify-end items-center overflow-hidden"
                 >
                     <img
-                        src="/dashboard-mobile.png"
+                        src="/dashboard-mobile-2.png"
                         alt="dashboard"
                         className="aspect-[9/16] max-md:h-[450px] max-lg:h-[550px] h-[600px]"
                     />
