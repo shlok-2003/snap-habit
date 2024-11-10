@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,17 +21,21 @@ import { useAuthenticates } from "@/hooks/use-authenticate";
 import axios from "axios";
 import { GET_USER_DS_COMMIT_COMPLETED_URL } from "@/lib/constants";
 import Image from "next/image";
+import WebcamComponent from "@/components/ui/webcam";
+import { cn } from "@/lib/utils";
 
 type Commit = {
-    id: number;
+    _id: string;
     title: string;
     caption: string;
     content: string;
+    isCompleted: boolean;
 };
 
 const ProfilePage = () => {
     const { session, status } = useAuthenticates();
 
+    const [cameraShown, setCameraShown] = useState(false);
     const [commitToDelete, setCommitToDelete] = useState<Commit | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -48,9 +52,7 @@ const ProfilePage = () => {
         });
     };
 
-    // const [openedComit, setOpenedComit] = useState<Comit>()
     const [image, setImage] = useState<File | null>(null);
-    const handleFileInput = useRef<HTMLInputElement>(null);
 
     const handleDeleteClick = (commit: Commit) => {
         setCommitToDelete(commit);
@@ -60,25 +62,11 @@ const ProfilePage = () => {
     const handleDeleteConfirm = () => {
         if (commitToDelete) {
             setCommits(
-                commits.filter((commit) => commit.id !== commitToDelete.id),
+                commits.filter((commit) => commit._id !== commitToDelete._id),
             );
         }
         setIsDeleteDialogOpen(false);
         setCommitToDelete(null);
-    };
-
-    // const handleImageClick = async () => {
-
-    // }
-
-    const handleCameraClick = () => {
-        handleFileInput.current?.click();
-    }
-
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            setImage(event.target.files[0]);
-        }
     };
 
     useEffect(() => {
@@ -150,6 +138,17 @@ const ProfilePage = () => {
                             key={index}
                             className="overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
                         >
+                            {cameraShown && (
+                                <WebcamComponent
+                                    image={image}
+                                    setImage={setImage}
+                                    show={cameraShown}
+                                    setShow={setCameraShown}
+                                    session={session}
+                                    commitCaption={commit.caption}
+                                    postId={commit._id}
+                                />
+                            )}
                             <CardContent className="p-0">
                                 <div className="relative h-32 w-full">
                                     <Image
@@ -159,18 +158,15 @@ const ProfilePage = () => {
                                         fill
                                     />
                                     <Trash2 className="absolute top-2 left-2 h-6 w-6 text-red-600 bg-black rounded-full p-1 cursor-pointer" />
-                                    <Camera className="absolute top-2 right-2 h-6 w-6 text-white bg-black rounded-full p-1 cursor-pointer" onClick={handleCameraClick}/>
-                                    <input 
-                                        type="file"
-                                        accept="image/*"
-                                        capture="environment"
-                                        onChange={handleImageChange}
-                                        className="hidden"
-                                        ref={handleFileInput}
+                                    <Camera
+                                        className={cn("absolute top-2 right-2 h-6 w-6 text-white bg-black rounded-full p-1 cursor-pointer", commit.isCompleted ? "hidden" : "")}
+                                        onClick={() =>
+                                            setCameraShown(!cameraShown)
+                                        }
                                     />
                                 </div>
                                 <div className="p-3 space-y-2">
-                                    <h3 className="font-medium text-sm text-gray-800">
+                                    <h3 className={cn("font-medium text-sm text-gray-800", commit.isCompleted ? "line-through" : "")}>
                                         {commit.title}
                                     </h3>
                                     <div className="flex items-center gap-1 text-xs text-gray-600">
