@@ -18,42 +18,49 @@ import LinearChart from "@/components/ui/linear-chart";
 import CircularProgress from "@/components/ui/circular-progress";
 
 import { useAuthenticates } from "@/hooks/use-authenticate";
-import { GET_USER_DS_COMMIT_COMPLETED_URL, GET_USER_DS_DAILY_STREAK_URL } from "@/lib/constants";
+import {
+    GET_USER_DS_COMMIT_COMPLETED_URL,
+    GET_USER_DS_DAILY_STREAK_URL,
+} from "@/lib/constants";
 
 export default function Dashboard() {
     const { session, status } = useAuthenticates();
 
-
     const [commitsCompleted, setCommitsCompleted] = useState<number>(0);
     const [totalCommits, setTotalCommits] = useState<number>(0);
     const [dailyStreak, setDailyStreak] = useState<number>(0);
-    
+
     useEffect(() => {
-        if(status === "loading") return;
+        if (status === "loading") return;
 
         const fetch = async () => {
             try {
-                const response = await axios.get(`${GET_USER_DS_COMMIT_COMPLETED_URL}?email=${session?.user?.email}`);
+                const response = await axios.get(
+                    `${GET_USER_DS_COMMIT_COMPLETED_URL}?email=${session?.user?.email}`,
+                );
                 const result = response.data.data;
-                
+
                 console.log(result);
-                const completed = result.filter((post: any) => post.isCompleted);
+                const completed = result.filter(
+                    (post: any) => post.isCompleted,
+                );
                 console.log(completed);
                 setCommitsCompleted(completed.length);
                 setTotalCommits(result.length);
 
-
-                const dailyStreakResponse = await axios.get(`${GET_USER_DS_DAILY_STREAK_URL}?email=${session?.user?.email}`);
+                const dailyStreakResponse = await axios.get(
+                    `${GET_USER_DS_DAILY_STREAK_URL}?email=${session?.user?.email}`,
+                );
                 const dailyStreakResult = dailyStreakResponse.data.dailyStreak;
                 setDailyStreak(dailyStreakResult);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
-        }
+        };
 
         fetch();
-    }, [status, session])
-    
+    }, [status, session]);
+
     if (status === "loading") return <Loading />;
 
     return (
@@ -88,8 +95,7 @@ export default function Dashboard() {
                         <CardHeader className="pb-2">
                             <CardDescription>Daily Streak</CardDescription>
                             <CardTitle className="lg:text-3xl md:text-2xl text-xl flex flex-row items-center justify-start gap-2">
-                                <Flame className="" />{" "}
-                                {dailyStreak}
+                                <Flame className="" /> {dailyStreak}
                             </CardTitle>
                         </CardHeader>
                     </Card>
@@ -102,7 +108,13 @@ export default function Dashboard() {
                                 <CardTitle>Daily Score</CardTitle>
                             </CardHeader>
                             <CircularProgress
-                                progress={commitsCompleted / (totalCommits == 0 ? 1 : totalCommits) * 100}
+                                progress={
+                                    (commitsCompleted /
+                                        (totalCommits == 0
+                                            ? 1
+                                            : totalCommits)) *
+                                    100
+                                }
                                 className="flex justify-center items-center"
                             />
                         </CardContent>
@@ -128,9 +140,7 @@ export default function Dashboard() {
                     </Card>
                 </div>
 
-                <div className="grid lg:grid-cols-3 gap-4">
-                    
-                </div>
+                <div className="grid lg:grid-cols-3 gap-4"></div>
             </div>
         </main>
     );

@@ -23,11 +23,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
 
             try {
-                await axios.post(SIGN_UP_BACKEND_URL, {
-                    email: profile.email,
-                    name: profile.name,
-                    image: user.image,
-                });
+                // await axios.post(SIGN_UP_BACKEND_URL, {
+                //     email: profile.email,
+                //     name: profile.name,
+                //     image: user.image,
+                // });
 
                 return true;
             } catch (error) {
