@@ -13,7 +13,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-// import Translation from "../ui/translation";
+import Translation from "../ui/translation";
 import { useAuthenticates } from "@/hooks/use-authenticate";
 import Loading from "../ui/loading";
 import Image from "next/image";
@@ -50,7 +50,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-2 h-full">
-                {/* <Translation /> */}
+                <Translation />
                 <ToggleMode className="size-7 rounded-xl" />
                 {session?.user?.image ? (
                     <Image

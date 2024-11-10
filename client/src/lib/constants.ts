@@ -9,3 +9,4 @@ export const GET_USER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/get`
 export const GET_FOLLOWER_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/followers`;
 export const GET_ALL_USERS_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/getallusers`;
 export const FOLLOW_USERS_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/toggle-follow`;
+export const RECOGNIZE_AND_MATCH_URL = `${process.env.NEXT_PUBLIC_SERVER_URL}/recognize-and-match`;
