@@ -124,7 +124,7 @@ export default function Component() {
         const fetchRituals = async () => {
             try {
                 const response = await axios.get(
-                    `${GET_RITUALS_URL}?email=levelupmonk18@gmail.com`,
+                    `${GET_RITUALS_URL}?email=shlokprajapati2003@gmail.com`,
             );
             const result = response.data.data;
                 // console.log(response.data);

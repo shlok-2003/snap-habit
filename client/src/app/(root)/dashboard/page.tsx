@@ -107,7 +107,8 @@ export default function Dashboard() {
                 const gFittCalories = await makeAuthenticatedRequest(GET_FIT_CALORIES_URL);
 
                 setFitnessData({
-                    steps: gFittSteps.steps[gFittSteps.steps.length - 1].value,
+                    // steps: gFittSteps.steps[gFittSteps.steps.length - 1].value,
+                    steps: gFittSteps.steps.reduce((acc: number, curr: any) => acc + curr.value, 0),
                     activities: gFittActivities.activities[gFittActivities.activities.length - 1].activities[0].type,
                     sleep: 0,
                     calories: gFittCalories.calories[gFittCalories.calories.length - 1].value,
@@ -178,7 +179,7 @@ export default function Dashboard() {
                             <CardHeader
                                 className={`flex flex-row items-center justify-between space-y-0 pb-2 text-custom-dark-orange`}
                             >
-                                <CardTitle className="text-sm font-medium">
+                                <CardTitle className="text-sm font-medium uppercase">
                                     {key}
                                 </CardTitle>
                                 {/* <item.icon className="h-4 w-4" /> */}

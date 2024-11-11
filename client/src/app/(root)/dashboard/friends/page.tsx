@@ -23,6 +23,7 @@ import {
 } from "@/lib/constants";
 import Loading from "@/components/ui/loading";
 import { Session } from "next-auth";
+import { toast } from "@/hooks/use-toast";
 
 interface User {
     _id: string;
@@ -230,6 +231,7 @@ const UsersComponent = () => {
                 `${FOLLOW_USERS_URL}/${user._id}?email=${session?.user?.email}`,
             );
             console.log(`Following ${data}`);
+            toast.success("Followed successfully");
         } catch (error) {
             console.error(error);
         }
