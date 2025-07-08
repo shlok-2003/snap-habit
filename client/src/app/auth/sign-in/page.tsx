@@ -10,11 +10,15 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import ToggleMode from "@/components/ui/toggle-mode";
 import { FcGoogle } from "react-icons/fc";
 
 export default function LoginPage() {
     return (
-        <div className="flex items-center justify-center min-h-screen bg-background bg-[url('/client-bg.jpg')] bg-cover bg-no-repeat">
+        <div className="flex items-center justify-center min-h-screen bg-background bg-[url('/client-bg.jpg')] bg-cover bg-no-repeat relative">
+            <div className="absolute top-4 right-4">
+                <ToggleMode className="size-9 rounded-xl" />
+            </div>
             <Card className="w-[350px]">
                 <CardHeader>
                     <CardTitle>Welcome back</CardTitle>

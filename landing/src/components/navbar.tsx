@@ -3,6 +3,7 @@ import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 import { Link } from "react-scroll";
 
@@ -73,44 +74,45 @@ export default function Navbar() {
                 />
                 Snap Habit
             </div>
-            <nav className="hidden gap-2 lg:flex [&>*]:text-black [&>*]:font-medium [&>*]:rounded-xl [&>*]:px-3 [&>*]:py-1 [&>*]:transition-colors [&>*]:duration-300">
+            <nav className="hidden gap-2 lg:flex [&>*]:text-foreground [&>*]:font-medium [&>*]:rounded-xl [&>*]:px-3 [&>*]:py-1 [&>*]:transition-colors [&>*]:duration-300">
                 <Link
                     to="home"
                     smooth={true}
-                    className="text-base font-medium hover:bg-custom-fade-orange"
+                    className="text-base font-medium hover:bg-accent"
                 >
                     Home
                 </Link>
                 <Link
                     to="about"
                     smooth={true}
-                    className="text-base font-medium hover:bg-custom-fade-orange"
+                    className="text-base font-medium hover:bg-accent"
                 >
                     About
                 </Link>
                 <Link
                     to="features"
                     smooth={true}
-                    className="text-base font-medium hover:bg-custom-fade-orange"
+                    className="text-base font-medium hover:bg-accent"
                 >
                     Features
                 </Link>
                 <Link
                     to="testimonials"
                     smooth={true}
-                    className="text-base font-medium hover:bg-custom-fade-orange"
+                    className="text-base font-medium hover:bg-accent"
                 >
                     Testimonials
                 </Link>
                 <Link
                     to="trynow"
                     smooth={true}
-                    className="text-base font-medium hover:bg-custom-fade-orange"
+                    className="text-base font-medium hover:bg-accent"
                 >
                     Try Now
                 </Link>
             </nav>
             <div className="flex items-center gap-4 max-md:gap-2 text-base">
+                <ThemeToggle />
                 <a href={import.meta.env.VITE_PUBLIC_CLIENT_BASE_LOGIN_URL}>
                     <Button
                         variant="outline"

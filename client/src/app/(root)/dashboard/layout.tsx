@@ -3,7 +3,6 @@
 import { Open_Sans, Poppins } from "next/font/google";
 
 import Header from "@/components/dashboard/header";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/toaster";
@@ -22,18 +21,16 @@ const poppins = Poppins({
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <SidebarProvider
-                className={`${openSans.variable} ${poppins.variable} antialiased font-poppins`}
-            >
-                <AppSidebar />
-                <main className="flex min-h-screen flex-col gap-4 w-full">
-                    <Header />
-                    {children}
-                </main>
-                <Toaster />
-            </SidebarProvider>
-        </ThemeProvider>
+        <SidebarProvider
+            className={`${openSans.variable} ${poppins.variable} antialiased font-poppins`}
+        >
+            <AppSidebar />
+            <main className="flex min-h-screen flex-col gap-4 w-full">
+                <Header />
+                {children}
+            </main>
+            <Toaster />
+        </SidebarProvider>
     );
 };
 
